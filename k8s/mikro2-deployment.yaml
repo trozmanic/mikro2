@@ -1,0 +1,37 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mikro2-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mikro2
+  template:
+    metadata:
+      labels:
+        app: mikro2
+    spec:
+      containers:
+      - image: tr6150/mikro2:1.0
+        name: mikro2
+        ports:
+        - containerPort: 8081
+          name: server
+          protocol: TCP
+
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: mikro2
+spec:
+  type: LoadBalancer
+  ports:
+    - port: 8081
+      protocol: TCP
+      targetPort: server
+  selector:
+    app: mikro2
+
